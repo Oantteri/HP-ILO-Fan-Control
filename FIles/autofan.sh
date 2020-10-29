@@ -12,79 +12,37 @@
 PASSWORD="your password"
 USERNAME="your username"
 ILOIP="your ilo ip"
-T1="$(sensors -Aj coretemp-isa-0000 | jq '.[][] | to_entries[] | select(.key | endswith("input")) | .value' | sort -rn | head -n1)"
-T2="$(sensors -Aj coretemp-isa-0001 | jq '.[][] | to_entries[] | select(.key | endswith("input")) | .value' | sort -rn | head -n1)"
+T1="$(sensors | sed -rn 's/.*Core 0:\s+.([0-9]+).*/\1/p')"
 
 echo "==============="
 echo "CPU 1 Temp $T1 C"
 echo "==============="
 
-if [[ $T1 > 67 ]]
-   then
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 4 max 39'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 5 max 39'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 6 max 39'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 7 max 39'
-elif [[ $T1 > 58 ]]
-    then
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 4 max 30'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 5 max 30'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 6 max 30'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 7 max 30'
-elif [[ $T1 > 54 ]]
-    then
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 4 max 28'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 5 max 28'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 6 max 28'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 7 max 28'
-elif [[ $T1 > 52 ]]
-    then
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 4 max 24'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 5 max 24'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 6 max 24'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 7 max 24'
-elif [[ $T1 > 50 ]]
-    then
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 4 max 22'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 5 max 22'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 6 max 22'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 7 max 22'
-    else
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 4 max 20'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 5 max 20'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 6 max 20'
-        sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 7 max 20'
-fi
-
-echo "==============="
-echo "CPU 2 Temp $T2 C"
-echo "==============="
-
-if [[ $T2 > 67 ]]
+if [ $T1 -gt 67 ]
    then
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 0 max 39'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 1 max 39'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 2 max 39'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 3 max 39'
-elif [[ $T2 > 58 ]]
+elif [ $T1 -gt 58 ]
     then
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 0 max 30'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 1 max 30'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 2 max 30'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 3 max 30'
-elif [[ $T2 > 54 ]]
+elif [ $T1 -gt 54 ]
     then
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 0 max 28'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 1 max 28'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 2 max 28'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 3 max 28'
-elif [[ $T2 > 52 ]]
+        elif [ $T1 -gt 52 ]
     then
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 0 max 24'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 1 max 24'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 2 max 24'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 3 max 24'
-elif [[ $T2 > 50 ]]
+elif [ $T1 -gt 50 ]
     then
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 0 max 22'
         sshpass -p $PASSWORD ssh $USERNAME@$ILOIP 'fan p 1 max 22'
