@@ -21,11 +21,16 @@ if [ $input = yes ] ; then
         cd /
         echo "Downloading Latest autofan.sh"
         wget https://raw.githubusercontent.com/That-Guy-Jack/HP-ILO-Fan-Control/main/Files/autofan.sh
+	echo "Do you you want to add the script to crontab? [yes] or [no] :"
+	read input
+	if [ $input = yes ] ; then
+	crontab -l 2>/dev/null; echo "*/1 * * * * /bin/bash /autofan.sh >> /tmp/cron.log"
+	echo "Added the autofan to be run at every minute to crontab."       
         echo "Downloaded autofan.sh Change Placeholders with correct info"
         echo "Please Visit the Github Page to Follow Instructions"
         echo "https://github.com/That-Guy-Jack/HP-ILO-Fan-Control"
-        exit 1
-else
-   echo " :( exitting"
+	exit 1
+	else
+echo " :( exitting"
    exit 1
    fi
